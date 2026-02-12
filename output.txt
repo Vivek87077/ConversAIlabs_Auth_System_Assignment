@@ -1,0 +1,12 @@
+---- LOGIN ----
+{"message":"OTP sent","loginSessionId":"v4y4dk"}
+
+---- VERIFY OTP ----
+{"message":"OTP verified","sessionId":"v4y4dk"}
+
+---- TOKEN ----
+{"access_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InZzaGFybWExMjNAZ21haWwuY29tIiwic2Vzc2lvbklkIjoidjR5NGRrIiwiaWF0IjoxNzcwOTA2MTUxLCJleHAiOjE3NzA5MDcwNTF9._syb-uIwORkouVlJoQV5P98zs3iiZBbcIlB60W7aGbo","expires_in":900}
+
+---- PROTECTED ----
+{"message":"Access granted","user":{"email":"vsharma123@gmail.com","sessionId":"v4y4dk","iat":1770906151,"exp":1770907051},"success_flag":"FLAG-dnNoYXJtYTEyM0BnbWFpbC5jb21fQ09NUExFVEVEX0FTU0lHTk1FTlQ="}
+
