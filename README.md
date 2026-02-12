@@ -1,6 +1,8 @@
 # The Silent Server (Backend Debugging Assignment)
 
-This API is intentionally broken. Your task is to debug it and complete the authentication flow.
+This project is a backend debugging challenge where a broken authentication flow was analyzed, fixed, and validated step-by-step.
+
+The objective was to repair the authentication system and ensure the complete login → OTP → JWT → protected route flow works correctly.
 
 ## Setup
 
@@ -23,13 +25,36 @@ The goal is to fix the broken authentication endpoints so that a user can:
 3.  **Exchange the Session** for a JWT Access Token.
 4.  **Access Protected Routes** using the token.
 
-You will need to use your browser's developer tools, network inspection, and server logs to debug.
-
 ---
 
-## Tasks & Verification
+## Debugging Summary
 
-### Task 1: Fix Login
+The following issues were identified and resolved:
+1. **Logger Middleware Issue**
+Logger was incorrectly acting as authentication middleware.
+It was blocking all routes with 401 responses.
+Fixed by converting it into a proper request logger and adding next().
+
+2. **OTP Logging Issue**
+OTP was generated but not logged.
+Fixed by updating console log to include OTP value.
+
+3. **Token Endpoint Bug**
+`/auth/token` incorrectly read session from Authorization header.
+It should read session from session_token cookie.
+Fixed by:
+Enabling cookie-parser
+Reading req.cookies.session_token
+Validating session properly
+
+4. **Auth Middleware Bug**
+`next()` was missing after successful JWT verification.
+This caused the request to hang indefinitely.
+Fixed by adding `next()` inside the try block.
+
+## Verification Steps
+
+### Step 1: Login
 **Endpoint:** `POST /auth/login`
 The server should generate a session and log an OTP to the console.
 
@@ -43,7 +68,7 @@ curl -X POST http://localhost:3000/auth/login \
 - Server logs the OTP (e.g., `[OTP] Session abc12345 generated`).
 - Response contains `loginSessionId`.
 
-### Task 2: Fix OTP Verification
+### Step 2: Verify OTP
 **Endpoint:** `POST /auth/verify-otp`
 The server fails to verify the OTP correctly. You need to find out why.
 *Hint: Check data types and how cookies are set.*
@@ -59,7 +84,7 @@ curl -c cookies.txt -X POST http://localhost:3000/auth/verify-otp \
 - `cookies.txt` is created containing a session cookie.
 - Response says "OTP verified".
 
-### Task 3: Fix Token Generation
+### Step 3: Get JWT Token
 **Endpoint:** `POST /auth/token`
 This endpoint is supposed to issue a JWT, but it has a bug in how it reads the session.
 
@@ -71,7 +96,7 @@ curl -b cookies.txt -X POST http://localhost:3000/auth/token
 **Expected Outcome:**
 - Response contains `{ "access_token": "..." }`.
 
-### Task 4: Fix Protected Route Access
+### Step 4: Access Protected Route
 **Endpoint:** `GET /protected`
 Ensure the middleware correctly validates the token.
 
@@ -95,17 +120,28 @@ After fixing the bugs, you should be able to run the following sequence successf
 3.  **Get Token**: Exchange the session cookie for a JWT (`access_token`).
 4.  **Access Protected Route**: Use the JWT to get a 200 OK response with user details and a **unique Success Flag**.
 
-**Important**: You must use **your own email address** when testing the login flow. The success flag is generated based on the email you use.
 
 
 
 
-## Submission
+## Submission Details
 
-To submit your assignment:
+The repository includes:
 
-1.  Push your code to a **Public GitHub Repository**.
-2.  Add a file named `output.txt` in your repository.
-    *   This file must contain the terminal output of all 4 test commands (Login, Verify OTP, Get Token, Access Protected Route).
-    *   Ensure the final command's output showing the `success_flag` is clearly visible in this file.
-3.  Share the link to your repository.
+1.  Fixed source code
+2.  `output.txt` containing terminal outputs of all four test commands
+3.  Clear demonstration of successful authentication flow
+
+
+## Author
+Vivek Sharma
+📧 vsharma87077@gmail.com
+
+## Final Status
+Authentication flow fully debugged and functional:
+
+✔ Login
+✔ OTP Verification
+✔ Token Generation
+✔ Protected Route Access
+✔ Success Flag Generated
